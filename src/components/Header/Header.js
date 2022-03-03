@@ -1,31 +1,40 @@
 import Search from "antd/es/input/Search";
 import React, { useEffect, useState } from "react";
 import "./Header.css";
+import 'antd/dist/antd.min.css';
 
-function Header() {
-  let baseUrl = "https://www.metaweather.com/api/";
-  let [location, setLocation] = useState("");
+function Header(props) {
+  let baseUrl = "http://localhost:4000";
+  let [searchVal, setSearchVal] = useState("");
+
 
   useEffect(() => {
-    doSearch().then(data => {
-      console.log(data);
-    });
-  }, [location]);
+    if (searchVal !== "") {
+      doSearch().then(data => {
+        console.log(data);
+        props.onUpdate(data);
+      });
+    }
+  }, [searchVal]);
 
-  function onSearch() {
-    doSearch().then(data => {
-      console.log(data);
-    });
+  function onSearch(val) {
+      setSearchVal(val);
   }
 
   async function doSearch() {
-    let url = `${baseUrl}location/search/?query=(${location})`
+    let url = `${baseUrl}/doCitySearch?loc=${searchVal}`
+    console.log(url);
 
     try {
       let response = await fetch(url, {
         method: "GET"
       });
-      return await response.json();
+      if (response.status > 399) {
+        console.error("Server responded with status", response.status);
+      } else {
+        let val = await response.json();
+        return val;
+      }
     } catch (error) {
       console.log(error);
       console.log("errrorrrroororor");
