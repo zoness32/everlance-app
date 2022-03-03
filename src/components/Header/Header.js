@@ -23,7 +23,6 @@ function Header() {
 
     try {
       let response = await fetch(url, {
-        ""
         method: "GET"
       });
       return await response.json();
