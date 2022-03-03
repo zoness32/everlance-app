@@ -1,0 +1,14 @@
+.header {
+    background-color: #fcd76c;
+    min-height: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+p {
+    font-size: 3em;
+    font-weight: bold;
+}
