@@ -28,6 +28,7 @@ function Header() {
       return await response.json();
     } catch (error) {
       console.log(error);
+      console.log("errrorrrroororor");
     }
   }
 
