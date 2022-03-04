@@ -19,20 +19,57 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #4c4c4c;
 }
 
-.ant-divider {
-    border-top: 2px solid rgba(0,0,0,0.15);
+.dateText {
+    font-size: 1.8em;
 }
 
-.topRow {
+.currentTemp {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.horizontalDivider {
+    border-top: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.verticalDivider {
+    border-right: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.spacer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 300px;
+    justify-content: space-between;
+}
+
+.weatherStateSection {
+    align-items: center;
+    width: 200px;
+}
+
+.ant-modal-confirm-btns {
+    display: none;
+}
+
+.loadingScreen {
+    height: 500px;
+    place-content: center;
     display: flex;
 }
 
-.middleRow {
-    display: flex;
+.spinner {
+    align-self: center;
 }
 
-.bottomRow {
-
+.spinner span {
+    font-size: 90px !important;
+    color: #777777;
+    width: 90px;
 }

@@ -1,41 +1,62 @@
-import { Carousel, Divider, Space } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import React from "react";
+import { Divider, Space, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.min.css";
 import "./ModalContent.css";
 
 const ModalContent = (props) => {
+  const [data, setData] = useState(null);
+
+  async function getDetails(woeid) {
+    let response = await fetch(`http://localhost:4000/lookupCity?woeid=${ woeid }`);
+    return response.json();
+  }
+
+  useEffect(() => {
+    getDetails(props.woeid).then(data => {
+      console.log(data);
+      setData(data);
+    });
+    //eslint-disable-next-line
+  }, []);
+
   function twoDecimalPlaces(num) {
     return Math.round(num * 100) / 100;
   }
 
+  const antIcon = <LoadingOutlined spin />;
+
   return (
     <>
-      {/*<Carousel arrows prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />}>*/ }
       {
-        // props.data.consolidated_weather.map(day => (
-        <div className="carouselItemWrapper">
-          <p>Today</p>
-          <Divider/>
-          <Space>
-            <p className="temp">{ twoDecimalPlaces(props.data.the_temp) }</p>
-            <Space>
-              <img src="http://metaweather.com/static/img/weather/lr.svg" alt="stuff" style={{ width: "96px", height: "96px"}}/>
-              <p>{ props.data.weather_state_name }</p>
-            </Space>
-          </Space>
-          <Space split={ <Divider type="vertical"/> }>
-            <p>{ twoDecimalPlaces(props.data.min_temp) }</p>
-            <p>{ twoDecimalPlaces(props.data.max_temp) }</p>
-          </Space>
-          <div className="bottomRow">
-            <p>{ twoDecimalPlaces(props.data.wind_speed) }</p>
-          </div>
-        </div>
-        // ))
+        ( data ?
+
+            <div className="carouselItemWrapper">
+              <span className="dateText">Today</span>
+              <Divider className="horizontalDivider"/>
+              <div className="spacer">
+                <Space size={ 175 }>
+                  <span className="currentTemp">{ twoDecimalPlaces(data.consolidated_weather[0].the_temp) } C</span>
+                  <Space direction="vertical" className="weatherStateSection">
+                    <img src={ `/weather/${ data.consolidated_weather[0].weather_state_abbr }.png` }
+                         alt="stuff" style={ { width: "96px", height: "96px" } }/>
+                    <p>{ data.consolidated_weather[0].weather_state_name }</p>
+                  </Space>
+                </Space>
+                <Space size={ 25 }>
+                  <p>Min: { twoDecimalPlaces(data.consolidated_weather[0].min_temp) } C</p>
+                  <p>|</p>
+                  <p>Max: { twoDecimalPlaces(data.consolidated_weather[0].max_temp) } C</p>
+                </Space>
+              </div>
+              <div className="bottomRow">
+                <p>{ twoDecimalPlaces(data.consolidated_weather[0].wind_speed) } mph</p>
+              </div>
+            </div>
+            :
+            <div className="loadingScreen"><Spin className="spinner" style={{"fontSize": "90px", "width": "90px"}} indicator={antIcon} /></div>
+        )
       }
-      {/*</Carousel>*/ }
-      {/*<button>></button>*/ }
     </>
   );
 };

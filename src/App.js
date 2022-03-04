@@ -1,9 +1,8 @@
 import "./App.css";
-import Header from "./components/Header/Header";
 import ResultsList from "./components/ResultsList/ResultsList";
 import React, { useEffect, useState } from "react";
 import Search from "antd/es/input/Search";
-import { Skeleton } from "antd";
+import { Card } from "antd";
 
 function App() {
   let baseUrl = "http://localhost:4000";
@@ -14,20 +13,21 @@ function App() {
   useEffect(() => {
     if (searchVal !== "") {
       doSearch().then(data => {
-        console.log(data);
         setSearching(false);
       });
     }
+    //eslint-disable-next-line
   }, [searchVal]);
 
   function onSearch(val) {
     setSearchVal(val);
-    setSearching(true);
+    if (val !== searchVal) {
+      setSearching(true);
+    }
   }
 
   async function doSearch() {
     let url = `${ baseUrl }/doCitySearch?loc=${ searchVal }`;
-    console.log(url);
 
     try {
       let response = await fetch(url, {
@@ -41,22 +41,49 @@ function App() {
       }
     } catch (error) {
       console.log(error);
-      console.log("errrorrrroororor");
     }
   }
 
+  const cardBodyStyle = {
+    "padding": "0",
+    "height": "100%",
+    "width": "100%",
+    "maxHeight": "100%",
+    "position": "absolute"
+  };
+
+  const cardStyle = {
+    "height": "100%",
+    "textAlign": "center",
+    "boxShadow": "0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)"
+  };
+
   return (
     <div className="App">
-      <header className="header">
-        <p className="greeting">
-          How is the weather?
-        </p>
-        <Search className="searchInput" placeholder="Search city by name" onSearch={ onSearch } enterButton={ "Go" }
-                size="large"/>
-      </header>
-      { searching ? <Skeleton active/> :
-        <ResultsList results={ results }/>
-      }
+      <div className="header">
+        <div className="headerContent">
+          <p className="greeting">
+            How is the weather?
+          </p>
+          <Search className="searchInput" placeholder="Search city by name" onSearch={ onSearch } enterButton={ "Go" }
+                  size="large"/>
+        </div>
+      </div>
+      <div className="body">
+        <Card style={ cardStyle } bodyStyle={ cardBodyStyle } className="listCard" loading={ searching }>
+          {
+            (
+              results.length === 0 ?
+                <div className="noResults">
+                  <span>No results yet!</span>
+                  <span>Please use the search box above</span>
+                </div>
+                :
+                <ResultsList results={ results } isLoading={ searching }/>
+            )
+          }
+        </Card>
+      </div>
     </div>
   );
 }
