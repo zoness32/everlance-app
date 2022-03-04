@@ -1,0 +1,9 @@
+.resultsWrapper {
+    height: 100%
+}
+
+.ant-card-body {
+    display: flex;
+    flex-direction: column;
+    font-size: x-large;
+}
