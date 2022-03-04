@@ -29,6 +29,10 @@ long-term practices. I also made a few styling decisions based simply on speed.
 - I chose not to use a CSS preprocessor in this case, but in hindsight probably should have. It certainly would have made
 the stylesheet files less verbose!
 
+- While I did my best to take responsiveness into account, I didn't go so far as to evaluate media breakpoints and other 
+similar things. The app should display appropriately in the browser when the window is resized but it's possible to scrunch
+things up so much that things get wonky. This is something I would improve if given more time.
+
 Thank you for reviewing my submission and for your time and consideration!
 
 - Taylor Eernisse
